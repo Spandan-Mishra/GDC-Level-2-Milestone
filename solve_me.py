@@ -63,16 +63,60 @@ $ python tasks.py report # Statistics"""
         )
 
     def add(self, args):
+        priority = args[0]
+        desc = args[1]
+        if(self.current_items.get(int(priority))):
+            self.current_items[int(priority)+1] = self.current_items[int(priority)]
+            self.current_items[int(priority)] = desc
+        else:
+            self.current_items[int(priority)] = desc
+        print(f"Added task: \"{desc}\" with priority {priority}")
+        self.write_current()
         pass
 
     def done(self, args):
+        priority = args[0]
+        if self.current_items.get(int(priority)):
+            completed_item = self.current_items[int(priority)]
+            self.completed_items.append(completed_item)
+            del self.current_items[int(priority)]
+            print(f"Marked item as done.")
+            self.write_current()
+            self.write_completed()
+        else:
+            print(f"Error: no incomplete item with priority {priority} exists.")
         pass
 
     def delete(self, args):
+        priority = args[0]
+        if self.current_items.get(int(priority)):
+            del self.current_items[int(priority)]
+            print(f"Deleted task with priority {priority}")
+            self.write_current()
+        else:
+            print(f"Error: Item with priority {priority} does not exist. Nothing deleted.")
         pass
 
     def ls(self):
+        i = 1
+        for key in sorted(self.current_items.keys()):
+            print(f"{i}. {self.current_items[key]} [{key}]")
+            i+= 1
         pass
 
     def report(self):
+        self.read_current()
+        self.read_completed()
+        print(f"Pending : {len(self.current_items)}")
+        i = 1
+        for key in sorted(self.current_items.keys()):
+            print(f"{i}. {self.current_items[key]} [{key}]")
+            i+= 1
+        print()
+        i = 1
+        print(f"Completed : {len(self.completed_items)}")
+        for item in self.completed_items:
+            if item != "\n":
+             print(f"{i}. {item[:-1]}")
+             i+= 1
         pass
