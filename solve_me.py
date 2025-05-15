@@ -91,10 +91,10 @@ $ python tasks.py report # Statistics"""
         priority = args[0]
         if self.current_items.get(int(priority)):
             del self.current_items[int(priority)]
-            print(f"Deleted task with priority {priority}")
+            print(f"Deleted item with priority {priority}")
             self.write_current()
         else:
-            print(f"Error: Item with priority {priority} does not exist. Nothing deleted.")
+            print(f"Error: item with priority {priority} does not exist. Nothing deleted.")
         pass
 
     def ls(self):
